@@ -1,6 +1,7 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
+import { getContacts } from './services/contacts.js';
 
 import { getEnvVar } from './utils/getEnvVar.js';
 
@@ -20,9 +21,12 @@ export const setupServer = () => {
     }),
   );
 
-  app.get('/', (req, res) => {
+  app.get('/api/contacts', async (req, res) => {
+    const contacts = await getContacts();
     res.json({
-      message: 'Hello World!',
+      status: 200,
+      message: 'Successfully found contacts!',
+      data: contacts,
     });
   });
 
