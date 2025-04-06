@@ -1,4 +1,4 @@
-import { getContacts, getContactById } from '../services/contacts.js';
+import { getContacts, getContactById, addContact } from '../services/contacts.js';
 
 export const getContactsController = async (req, res) => {
     const contacts = await getContacts();
@@ -23,5 +23,14 @@ export const getContactsController = async (req, res) => {
       status: 200,
       message: `Successfully found contact with id ${contactId}!`,
       data: contact,
+    });
+  };
+
+  export const addContactController = async(req,res) =>{
+    const data = await addContact(req.body);
+    res.status(201).json({
+      status: 201,
+      message: 'Successfully created a product!',
+      data,
     });
   };
