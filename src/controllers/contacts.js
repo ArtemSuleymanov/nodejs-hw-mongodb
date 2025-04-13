@@ -9,14 +9,22 @@ export const getContactsController = async (req, res) => {
   const paginationParams = parsePaginationParams(req.query);
   const sortParams = parseSortParams(req.query, contactSortFields);
   const filters = parseFilterParams(req.query);
-  
-  const contacts = await getContacts({...paginationParams, ...sortParams, filters});
-    res.json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: contacts,
-    });
-  };
+
+  const { contacts, ...pagination } = await getContacts({
+    ...paginationParams,
+    ...sortParams,
+    filters
+  });
+
+  res.json({
+    status: 200,
+    message: 'Successfully found contacts!',
+    data: {
+      data: contacts,  
+      ...pagination    
+    }
+  });
+};
 
   export const getContactsByIdController = async (req, res) => {
     const { contactId } = req.params;
