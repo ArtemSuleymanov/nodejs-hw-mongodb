@@ -1,6 +1,9 @@
 import createHttpError from "http-errors";
+import { randomBytes } from 'crypto';
 import { UsersCollection } from "../db/models/user.js";
 import bcrypt from "bcrypt";
+import { SessionsCollection } from "../db/models/session.js";
+import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 const SALT_ROUNDS = 10;
 
 export const registerUser = async ({ name, email, password }) => {
@@ -19,4 +22,32 @@ export const registerUser = async ({ name, email, password }) => {
     });
   
     return newUser;
+  };
+
+  export const loginUser = async payload => {
+    const {email,password} = payload;
+    const user = await UsersCollection.findOne({email});
+
+    if (!user) {
+      throw createHttpError(401, "Email or password invalid");
+    }
+
+    const passwordCompare = await bcrypt.compare(password, user.password);
+
+    if (!passwordCompare) {
+      throw createHttpError(401, "Email or password invalid");
+    }
+
+    await SessionsCollection.deleteOne({ userId: user._id });
+
+    const accessToken = randomBytes(30).toString('base64');
+    const refreshToken = randomBytes(30).toString('base64');
+
+    return await SessionsCollection.create({
+      userId: user._id,
+      accessToken,
+      refreshToken,
+      accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+      refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
+    });
   };
