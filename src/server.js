@@ -1,7 +1,9 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
+import cookieParser from "cookie-parser";
 import contactsRouter from './routers/contacts.js';
+import authRouter from './routers/auth.js';
 import {notFoundHandler} from "./middlewares/notFoundHandler.js";
 import {errorHandler} from "./middlewares/errorHandler.js";
 import { getEnvVar } from './utils/getEnvVar.js';
@@ -13,7 +15,7 @@ export const setupServer = () => {
 
   app.use(express.json());
   app.use(cors());
-
+  app.use(cookieParser());
   app.use(
     pino({
       transport: {
@@ -22,6 +24,7 @@ export const setupServer = () => {
     }),
   );
 
+  app.use("/auth", authRouter);
   app.use('/contacts', contactsRouter);
  
 
