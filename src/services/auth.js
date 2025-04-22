@@ -84,3 +84,5 @@ export const registerUser = async ({ name, email, password }) => {
       ...newSession,
     });
   };
+
+  export const logoutUser = async sessionId => SessionsCollection.deleteOne({ _id: sessionId });
