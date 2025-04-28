@@ -4,6 +4,7 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { contactSortFields } from '../db/models/Contact.js';
 import { parseFilterParams } from '../utils/filters/parseFilterParams.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getContactsController = async (req, res) => {
   const { _id: userId } = req.user;
@@ -47,8 +48,15 @@ export const getContactsController = async (req, res) => {
 
   export const addContactController = async(req,res) =>{
     const { _id: userId } = req.user;
+    let photoUrl = null;
 
-    const data = await addContact({ ...req.body, userId });
+    if (req.file) {
+      const result = await saveFileToCloudinary(req.file.buffer, req.file.originalname);
+      photoUrl = result.secure_url;
+    }
+
+    const data = await addContact({ ...req.body, userId, photo: photoUrl });
+
     res.status(201).json({
       status: 201,
       message: 'Successfully created a contact!',
@@ -59,6 +67,12 @@ export const getContactsController = async (req, res) => {
   export const updateContactByIdController = async (req, res) => {
     const { contactId } = req.params;
     const { _id: userId } = req.user;
+    const updateData = {...req.body};
+
+    if (req.file) {
+      const result = await saveFileToCloudinary(req.file.buffer, req.file.originalname);
+      updateData.photo = result.secure_url;
+    }
   
     const updatedContact = await updateContactById(contactId, req.body, userId);
   
