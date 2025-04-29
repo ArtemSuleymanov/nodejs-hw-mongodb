@@ -8,7 +8,11 @@ const __dirname = path.dirname(__filename);
 
 const tempDir = path.join(__dirname, "../tmp");
 
-await fs.mkdir(tempDir, { recursive: true });
+try {
+  await fs.mkdir(tempDir, { recursive: true });
+} catch (err) {
+  console.error("Could not create tmp directory:", err.message);
+}
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

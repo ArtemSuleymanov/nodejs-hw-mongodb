@@ -74,7 +74,7 @@ export const getContactsController = async (req, res) => {
       updateData.photo = result.secure_url;
     }
   
-    const updatedContact = await updateContactById(contactId, req.body, userId);
+    const updatedContact = await updateContactById(contactId, updateData, userId);
   
     if (!updatedContact) {
       throw createHttpError(404, "Contact not found");
