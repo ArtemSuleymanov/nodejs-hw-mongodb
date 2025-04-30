@@ -51,8 +51,7 @@ export const getContactsController = async (req, res) => {
     let photoUrl = null;
 
     if (req.file) {
-      const result = await saveFileToCloudinary(req.file.buffer, req.file.originalname);
-      photoUrl = result.secure_url;
+      photoUrl = await saveFileToCloudinary(req.file);  
     }
 
     const data = await addContact({ ...req.body, userId, photo: photoUrl });
@@ -70,8 +69,7 @@ export const getContactsController = async (req, res) => {
     const updateData = {...req.body};
 
     if (req.file) {
-      const result = await saveFileToCloudinary(req.file.buffer, req.file.originalname);
-      updateData.photo = result.secure_url;
+      updateData.photo = await saveFileToCloudinary(req.file);  
     }
   
     const updatedContact = await updateContactById(contactId, updateData, userId);
