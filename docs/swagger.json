@@ -19,12 +19,8 @@
   ],
   "tags": [
     {
-      "name": "Students",
-      "description": "Operations about users."
-    },
-    {
-      "name": "Auth",
-      "description": "Auth operations."
+      "name": "Contacts",
+      "description": "Operations related to contact management"
     }
   ],
   "paths": {
@@ -107,6 +103,9 @@
           "200": {
             "$ref": "#/components/responses/200"
           },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -129,7 +128,7 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -142,7 +141,7 @@
                   "name": {
                     "description": "Contact's name",
                     "type": "string",
-                    "example": "IPhone"
+                    "example": "John"
                   },
                   "phoneNumber": {
                     "description": "Contact's phone number",
@@ -157,6 +156,11 @@
                       "home",
                       "personal"
                     ]
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Profile photo of the contact"
                   }
                 }
               }
@@ -207,8 +211,17 @@
           "200": {
             "$ref": "#/components/responses/200"
           },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       },
@@ -237,14 +250,14 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "name": {
                     "description": "Contact's name",
                     "type": "string",
-                    "example": "IPhone"
+                    "example": "John"
                   },
                   "phoneNumber": {
                     "description": "Contact's phone number",
@@ -259,6 +272,11 @@
                       "home",
                       "personal"
                     ]
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Profile photo of the contact"
                   }
                 }
               }
@@ -309,6 +327,9 @@
         "responses": {
           "204": {
             "description": "Delete contact by id"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
           },
           "401": {
             "$ref": "#/components/responses/401"
@@ -364,6 +385,17 @@
               "home",
               "personal"
             ]
+          },
+          "email": {
+            "description": "Contact's email",
+            "type": "string",
+            "format": "email",
+            "example": "john@example.com"
+          },
+          "isFavourite": {
+            "description": "Whether the contact is marked as favourite",
+            "type": "boolean",
+            "example": true
           },
           "userId": {
             "description": "Contact's user id",
