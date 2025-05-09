@@ -28,7 +28,7 @@ properties:
     format: email
     example: 'john@example.com'
   isFavourite:
-    description: "Whether the contact is marked as favourite"
+    description: "Whether the contact is marked as favourite!"
     type: boolean
     example: true
   userId:

@@ -44,8 +44,6 @@ parameters:
 responses:
   '200':
     $ref: '../../components/responses/200.yaml'
-  '400':
-    $ref: '../../components/responses/400.yaml'
   '401':
     $ref: '../../components/responses/401.yaml'
   '500':
